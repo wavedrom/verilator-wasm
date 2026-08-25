@@ -1,0 +1,49 @@
+{
+  "name": "verilator-wasm",
+  "version": "1.0.0",
+  "description": "Verilator compiled to WebAssembly, with an in-memory filesystem",
+  "homepage": "https://github.com/wavedrom/verilator-wasm#readme",
+  "bugs": {
+    "url": "https://github.com/wavedrom/verilator-wasm/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wavedrom/verilator-wasm.git"
+  },
+  "license": "MIT",
+  "author": "",
+  "type": "commonjs",
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.cjs"
+    },
+    "./verilator.wasm": "./dist/verilator.wasm"
+  },
+  "bin": {
+    "verilator-wasm": "bin/verilator-wasm.mjs"
+  },
+  "directories": {
+    "lib": "lib"
+  },
+  "files": [
+    "dist/",
+    "bin/verilator-wasm.mjs",
+    "lib/",
+    "gen/",
+    "verilator.json"
+  ],
+  "scripts": {
+    "build": "node bin/build.js",
+    "build:wasm": "node bin/build.js --stage 2,3",
+    "build:pack": "node bin/build.js --stage 3",
+    "test": "node --test \"test/*.test.mjs\""
+  },
+  "dependencies": {
+    "esbuild": "^0.28.2"
+  }
+}

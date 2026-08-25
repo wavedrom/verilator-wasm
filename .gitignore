@@ -1,0 +1,12 @@
+node_modules/
+
+# Stage-2 objects and dep files, ccache-backed and cheap to rebuild.
+obj/
+
+# Stage-2/3 artifacts. Published to npm, not committed.
+dist/
+
+package-lock.json
+
+# Stage-1 build output. Committed so downstream consumers don't need Python/flex/bison.
+gen/
