@@ -4,7 +4,7 @@
 // Three-stage build driver. Only stage 2 is wasm.
 //
 //   1  host code generation — the fork's own autotools build, cached into gen/
-//   2  wasm compile + link   — 165 TUs -> dist/verilator.wasm
+//   2  wasm compile + link   — all TUs (expectedTuCount in verilator.json) -> dist/verilator.wasm
 //   3  JS packaging          — esbuild the library into dist/
 
 const os = require('os');

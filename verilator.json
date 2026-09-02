@@ -1,7 +1,9 @@
 {
-  "path": "../verilator",
-  "url": "https://github.com/wavedrom/verilator.git",
+  "path": "../../verilator/verilator",
+  "url": "https://github.com/verilator/verilator.git",
   "branch": "wasi/pr-wasi-support",
-  "rev": "34b112c55",
+  "rev": "e6cee9d54",
+  "expectedTuCount": 166,
+  "minAstgenHeaders": 18,
   "comment": "Sibling checkout of the Verilator fork, never a submodule. The build resolves `path` first and clones `url` at `rev` only if it is absent. See plans/fork.md."
 }

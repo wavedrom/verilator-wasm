@@ -62,7 +62,7 @@ Three stages, only the second of which is wasm:
 | Stage | Driver | Product |
 | --- | --- | --- |
 | 1 | [lib/gen-host.js](lib/gen-host.js) | the fork's own autotools build; flex/bison/astgen output cached in `gen/` |
-| 2 | [lib/run-clang-wasm.js](lib/run-clang-wasm.js) | 165 TUs → `dist/verilator.wasm` (6.4 MB stripped, 1.22 MB brotli) |
+| 2 | [lib/run-clang-wasm.js](lib/run-clang-wasm.js) | 166 TUs → `dist/verilator.wasm` (6.4 MB stripped, 1.22 MB brotli) |
 | 3 | [lib/pack.js](lib/pack.js) | `dist/index.mjs`, `dist/index.cjs`, `dist/index.d.ts` |
 
 The runtime is dependency-free: [lib/vfs.mjs](lib/vfs.mjs) is the in-memory
