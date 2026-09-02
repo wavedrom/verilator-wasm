@@ -50,8 +50,12 @@ jobs:
       - name: Install host build dependencies
         run: |
           sudo apt-get update
+          # libfl-dev: on Debian/Ubuntu, FlexLexer.h (and libfl) ship in a
+          # separate package from `flex` itself (which is just the flex
+          # binary) — without it, any flex-generated C++ scanner fails to
+          # compile with "FlexLexer.h: No such file or directory".
           sudo apt-get install -y --no-install-recommends \
-            flex bison autoconf automake help2man perl gperf g++ ccache
+            flex libfl-dev bison autoconf automake help2man perl gperf g++ ccache
 
       - name: Cache wasi-sdk
         id: cache-wasi-sdk
