@@ -1,0 +1,91 @@
+name: CI
+
+on:
+  push:
+    branches: [trunk, main]
+  pull_request:
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout verilator-wasm
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          # Floor pinned in package.json "engines" (verified against v20.11.0
+          # locally: full test suite + a real tarball install's CJS require
+          # and ESM import). Build itself needs a real node too, for esbuild.
+          node-version: '20'
+
+      - name: Read pinned Verilator checkout (owner/repo, rev)
+        id: fork
+        run: |
+          node -e "
+            const cfg = require('./verilator.json');
+            const fs = require('fs');
+            // actions/checkout's 'repository' input wants owner/repo, not a
+            // full URL, so strip it down here.
+            const m = cfg.url.match(/github\.com[:/]([^/]+\/[^/]+?)(\.git)?$/);
+            if (!m) throw new Error('cannot parse owner/repo from ' + cfg.url);
+            fs.appendFileSync(process.env.GITHUB_OUTPUT,
+              'repo=' + m[1] + '\n' +
+              'rev=' + cfg.rev + '\n');
+          "
+
+      - name: Checkout pinned Verilator fork
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ steps.fork.outputs.repo }}
+          ref: ${{ steps.fork.outputs.rev }}
+          path: verilator-fork
+
+      - name: Install host build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            flex bison autoconf automake help2man perl gperf g++ ccache
+
+      - name: Cache wasi-sdk
+        id: cache-wasi-sdk
+        uses: actions/cache@v4
+        with:
+          path: /opt/wasi-sdk
+          key: wasi-sdk-33-x86_64-linux
+
+      - name: Install wasi-sdk 33
+        if: steps.cache-wasi-sdk.outputs.cache-hit != 'true'
+        run: |
+          curl -fL -o /tmp/wasi-sdk.tar.gz \
+            https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-33/wasi-sdk-33.0-x86_64-linux.tar.gz
+          tar -xzf /tmp/wasi-sdk.tar.gz -C /tmp
+          sudo mv /tmp/wasi-sdk-33.0-x86_64-linux /opt/wasi-sdk
+
+      - name: Cache stage-1 host codegen (gen/)
+        uses: actions/cache@v4
+        with:
+          path: gen
+          # Keyed on the pinned rev: any bump invalidates the cache, same as
+          # gen-host.js's own drift check would force a rebuild locally.
+          key: gen-${{ steps.fork.outputs.rev }}
+
+      - name: Install npm dependencies
+        run: npm ci
+
+      - name: Build (all 3 stages)
+        run: node bin/build.js --verilator "$GITHUB_WORKSPACE/verilator-fork"
+
+      - name: Test
+        run: npm test
+
+      - name: Check published tarball size
+        run: node bin/check-pack-size.js
+
+      - name: Upload dist/ for inspection
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+          retention-days: 7
