@@ -36,11 +36,16 @@ jobs:
           "
 
       - name: Checkout pinned Verilator fork
-        uses: actions/checkout@v4
-        with:
-          repository: ${{ steps.fork.outputs.repo }}
-          ref: ${{ steps.fork.outputs.rev }}
-          path: verilator-fork
+        # Not actions/checkout: its shallow "fetch by SHA" path only works
+        # with a full 40-char commit SHA. verilator.json pins a short one
+        # (git's own abbreviated form, as printed by `git describe` etc.), so
+        # actions/checkout treats it as a branch/tag name pattern instead —
+        # refs/heads/e6cee9d54* doesn't exist, and the fetch fails. Clone and
+        # check out the short SHA directly instead.
+        run: |
+          git clone --filter=blob:none \
+            "https://github.com/${{ steps.fork.outputs.repo }}.git" verilator-fork
+          git -C verilator-fork checkout "${{ steps.fork.outputs.rev }}"
 
       - name: Install host build dependencies
         run: |
