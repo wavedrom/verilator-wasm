@@ -37,7 +37,8 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
-    "./verilator.wasm": "./dist/verilator.wasm"
+    "./verilator.wasm": "./dist/verilator.wasm",
+    "./package.json": "./package.json"
   },
   "bin": {
     "verilator-wasm": "bin/verilator-wasm.mjs"

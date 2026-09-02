@@ -7,6 +7,29 @@ webview — no native toolchain, no Docker, no server round-trip.
 Output is byte-identical to native `verilator_bin`: the `--json-only` AST that
 this produces matches the golden reference in `test/fixtures/` exactly.
 
+## Part of the `verilator` npm family
+
+This package is the universal-reach counterpart to
+[`verilator`](https://www.npmjs.com/package/verilator) (native prebuilt
+binaries for linux-x64/darwin-x64/darwin-arm64,
+[drom/npm-verilator](https://github.com/drom/npm-verilator)). That package's
+`verilator` command uses this one automatically as a fallback whenever no
+native binary is available — native Windows, an unsupported `os`/`cpu`, or a
+sandboxed install that skipped the native `optionalDependency` — so most
+users never need to depend on `verilator-wasm` directly.
+
+Reach for this package directly instead of `verilator` when you already know
+you want the wasm engine specifically: browser or VSCode-webview code (no
+process to spawn at all), a sandboxed/serverless environment where spawning a
+native binary isn't an option, or you want the in-memory-VFS `run()` API
+rather than a CLI over a real filesystem. `verilator`'s shim is a thin
+`spawnSync` over this package's own CLI (`bin/verilator-wasm.mjs`) for exactly
+this reason — the two are not competing implementations, one wraps the other.
+
+The trade-off either way is: no `--build`/`--hierarchical` (both shell out,
+which WASI can't do), no compiling the emitted C++, and slower than native.
+See **Supported** below for exactly what that leaves in scope.
+
 ## Use
 
 ```js
@@ -41,10 +64,27 @@ npx verilator-wasm --json-only -O0 --Mdir out top.sv
 
 ## Supported
 
-`--json-only` and `--lint-only` shaped work: anything that does not shell out.
-Out of scope by construction: `--build` and `--hierarchical` (both need
-`V3Os::system()`), compiling the emitted C++, `verilator_coverage`, and
-multi-threaded verilation.
+The wasm module is a full compile of `verilator_bin` — all 166 translation
+units on its native link line, not a stripped-down build for one mode. `main()`
+pulls in the whole pass registry regardless of the mode flag, so nothing
+mode-specific was left out at compile time.
+
+`--json-only -O0` is verified byte-identical to native and pinned by a golden
+fixture (`test/fixtures/Vtop.tree.json`) — that's the correctness bar this
+repo holds itself to. `--lint-only`, `--cc`/`--sc`, `--xml-only`, and other
+single-pass, single-process modes are compiled in and reachable through the
+same `run()` — `--cc --protect-ids` is confirmed live (getentropy-backed
+random identifiers differ run to run) — but don't yet have their own
+byte-parity fixture. Anything that does not shell out or need a second
+compiler is fair game; only what's actually been checked against native is
+called done in [plans/wasm.md](plans/wasm.md).
+
+Out of scope by construction, not just untested: `--build` and
+`--hierarchical` (both need `V3Os::system()`, which wasi-libc declares but
+traps rather than runs), compiling the emitted C++ (a second compiler, not on
+the table), `verilator_coverage`/`verilator_gantt`/`verilator_profcfunc`
+(separate binaries, never on this link line), and multi-threaded verilation
+(the module imports `wasi_snapshot_preview1` only — no `pthread_create`).
 
 ## Build
 
