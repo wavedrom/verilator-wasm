@@ -1,0 +1,51 @@
+verilator-wasm — third-party license notice
+============================================
+
+This package carries two distinct copyright works under two different
+licenses. Full license texts are in LICENSES/; short identifiers below are
+SPDX (https://spdx.org/licenses/).
+
+1. This project's own code
+---------------------------
+SPDX-License-Identifier: MIT
+Copyright (c) 2026 wavedrom
+
+Applies to everything in this repository except the compiled artifacts and
+embedded seed data listed under (2): lib/, bin/, test/, and the build
+drivers in general. Full text: LICENSE (also mirrored at LICENSES/MIT.txt).
+
+2. Verilator (compiled to WebAssembly, and its embedded runtime sources)
+-------------------------------------------------------------------------
+SPDX-License-Identifier: LGPL-3.0-only OR Artistic-2.0
+Copyright (c) 2003-2026 Wilson Snyder and the Verilator contributors
+(https://verilator.org, https://github.com/verilator/verilator)
+
+Applies to:
+  - dist/verilator.wasm — a wasm32-wasip1 compile of Verilator's own
+    verilator_bin sources (see the fork pinned in verilator.json and the
+    build recipe in lib/gen-host.js / lib/run-clang-wasm.js). This is a
+    derived work of Verilator, not original code by this project.
+  - gen/vroot-data.mjs — Verilator's own runtime seed files
+    (verilated_std.sv, verilated_std_waiver.vlt, and related headers),
+    base64-embedded so the wasm module has a VERILATOR_ROOT without host
+    filesystem access. Same upstream origin, same license.
+
+Per Verilator's own licensing (see its LICENSE and LICENSES/ directory),
+recipients may choose either license for this component:
+  - GNU Lesser General Public License v3.0, LICENSES/LGPL-3.0-only.txt, or
+  - Perl Artistic License v2.0, LICENSES/Artistic-2.0.txt.
+
+Neither license requires relicensing this project's own MIT-licensed code
+(1): both permit linking/embedding under different terms, and this project
+imposes no additional restriction on the LGPL/Artistic-licensed component
+beyond what those licenses already state. See LICENSES/LGPL-3.0-only.txt
+section 4 ("Combined Works") if redistributing dist/verilator.wasm as part
+of a further combined work.
+
+Source
+------
+This package does not include Verilator's own source tree (see plans/npm.md
+and plans/wasm.md for why: gen/ is trimmed to runtime-only artifacts).
+Corresponding source for dist/verilator.wasm is the Verilator fork and
+revision pinned in verilator.json, obtainable at the url/rev recorded
+there — currently https://github.com/verilator/verilator.git.

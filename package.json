@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/wavedrom/verilator-wasm.git"
   },
-  "license": "MIT",
+  "license": "(MIT AND (LGPL-3.0-only OR Artistic-2.0))",
   "author": "",
   "type": "commonjs",
   "main": "dist/index.cjs",
@@ -35,7 +35,9 @@
     "bin/verilator-wasm.mjs",
     "lib/",
     "gen/",
-    "verilator.json"
+    "verilator.json",
+    "NOTICE",
+    "LICENSES/"
   ],
   "scripts": {
     "build": "node bin/build.js",
