@@ -1,6 +1,6 @@
 {
   "name": "verilator-wasm",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Verilator compiled to WebAssembly, with an in-memory filesystem",
   "homepage": "https://github.com/wavedrom/verilator-wasm#readme",
   "bugs": {
@@ -12,7 +12,22 @@
   },
   "license": "(MIT AND (LGPL-3.0-only OR Artistic-2.0))",
   "author": "",
+  "keywords": [
+    "verilator",
+    "wasm",
+    "wasi",
+    "webassembly",
+    "verilog",
+    "systemverilog",
+    "lint",
+    "json-only",
+    "hdl"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
   "type": "commonjs",
+  "sideEffects": false,
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -33,9 +48,11 @@
   "files": [
     "dist/",
     "bin/verilator-wasm.mjs",
-    "lib/",
-    "gen/",
-    "verilator.json",
+    "lib/index.mjs",
+    "lib/index.d.ts",
+    "lib/vfs.mjs",
+    "lib/wasi.mjs",
+    "gen/vroot-data.mjs",
     "NOTICE",
     "LICENSES/"
   ],
@@ -45,7 +62,7 @@
     "build:pack": "node bin/build.js --stage 3",
     "test": "node --test \"test/*.test.mjs\""
   },
-  "dependencies": {
+  "devDependencies": {
     "esbuild": "^0.28.2"
   }
 }
