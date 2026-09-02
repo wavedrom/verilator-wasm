@@ -77,7 +77,10 @@ jobs:
           key: gen-${{ steps.fork.outputs.rev }}
 
       - name: Install npm dependencies
-        run: npm ci
+        # Not `npm ci`: package-lock.json is gitignored in this repo (see
+        # .gitignore), so there's no committed lockfile for `ci` to install
+        # from.
+        run: npm install
 
       - name: Build (all 3 stages)
         run: node bin/build.js --verilator "$GITHUB_WORKSPACE/verilator-fork"
