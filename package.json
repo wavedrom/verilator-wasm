@@ -61,7 +61,7 @@
     "build": "node bin/build.js",
     "build:wasm": "node bin/build.js --stage 2,3",
     "build:pack": "node bin/build.js --stage 3",
-    "test": "node --test \"test/*.test.mjs\"",
+    "test": "node --test test/",
     "check:pack-size": "node bin/check-pack-size.js"
   },
   "devDependencies": {
