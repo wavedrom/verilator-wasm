@@ -38,7 +38,11 @@ export interface RunResult {
   stdout: string;
   /** Diagnostics live here. */
   stderr: string;
-  /** Files created or modified by the run, decoded as UTF-8, keyed relative to `cwd`. */
+  /**
+   * Files created or modified by the run, decoded as UTF-8, keyed relative to
+   * `cwd`. Decoded lazily on first access per key; outputs larger than V8's max
+   * string length (~512 MiB) are only readable through `filesBytes`.
+   */
   files: Record<string, string>;
   /** The same files, undecoded. */
   filesBytes: Record<string, Uint8Array>;
