@@ -125,14 +125,14 @@ is, since that package is a repack of upstream binaries and this one carries an
 API of its own.
 
 The engine version is data, not the package version: the wasm in this release is
-built from the fork rev pinned in [verilator.json](verilator.json) and reports
+built from the upstream Verilator rev pinned in [verilator.json](verilator.json) and reports
 itself as `Verilator 5.051 devel rev v5.050-301-ge6cee9d54`. Every run prints it
 with `--version` or in the verilation report.
 
 ## Build
 
 Needs [wasi-sdk](bin/install-wasi-sdk.sh) 33 at `/opt/wasi-sdk` and
-a sibling checkout of the Verilator fork pinned in [verilator.json](verilator.json).
+a sibling checkout of upstream Verilator pinned in [verilator.json](verilator.json).
 
 ```
 node bin/build.js            # all three stages
@@ -144,7 +144,7 @@ Three stages, only the second of which is wasm:
 
 | Stage | Driver | Product |
 | --- | --- | --- |
-| 1 | [lib/gen-host.js](lib/gen-host.js) | the fork's own autotools build; flex/bison/astgen output cached in `gen/` |
+| 1 | [lib/gen-host.js](lib/gen-host.js) | Verilator's own autotools build; flex/bison/astgen output cached in `gen/` |
 | 2 | [lib/run-clang-wasm.js](lib/run-clang-wasm.js) | 166 TUs → `dist/verilator.wasm` (6.4 MiB stripped, 1.22 MiB brotli) |
 | 3 | [lib/pack.js](lib/pack.js) | `dist/index.mjs`, `dist/index.cjs`, `dist/index.d.ts` |
 

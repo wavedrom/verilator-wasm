@@ -1,9 +1,9 @@
 {
-  "path": "../verilator",
-  "url": "https://github.com/wavedrom/verilator.git",
-  "branch": "fix/vnuser-32bit",
-  "rev": "a31df76c1",
+  "path": "../../verilator/verilator",
+  "url": "https://github.com/verilator/verilator.git",
+  "branch": "master",
+  "rev": "f536f24e7",
   "expectedTuCount": 174,
   "minAstgenHeaders": 18,
-  "comment": "Sibling checkout of the Verilator fork, never a submodule. The build resolves `path` first and clones `url` at `rev` only if it is absent. See plans/fork.md. Pinned to wavedrom/verilator fix/vnuser-32bit = upstream master da6514e69 + verilator/verilator#9146 (VNUser 32-bit fix, required for wasm32); switch back to upstream once merged."
+  "comment": "Sibling checkout of upstream Verilator, never a submodule. The build resolves `path` first and clones `url` at `rev` only if it is absent. See plans/fork.md. Pinned to upstream master f536f24e7 = merge of verilator/verilator#9146 (VNUser 32-bit fix, required for wasm32)."
 }

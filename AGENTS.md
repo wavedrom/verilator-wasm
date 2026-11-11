@@ -10,13 +10,13 @@ Verilator compiled to wasm32-wasip1 + in-memory FS. See README.md for usage/desi
 - `obj/` stage 2 `.o`/`.d` compile cache
 - `dist/` stage 3 output: `index.mjs`/`index.cjs`/`index.d.ts`/`verilator.wasm` — never hand-edit
 - `test/` node:test, golden JSON in `test/fixtures/`
-- `plans/wasm.md` design notes; `plans/fork.md` Verilator fork patches/upstreaming
-- `verilator.json` pins sibling Verilator checkout (path/url/branch/rev)
+- `plans/wasm.md` design notes; `plans/fork.md` history of the (now retired) fork patches/upstreaming
+- `verilator.json` pins sibling upstream Verilator checkout (path/url/branch/rev)
 
 ## Build
 
 Requires wasi-sdk 33 at `/opt/wasi-sdk` (`bin/install-wasi-sdk.sh`) and sibling
-checkout of the fork pinned in `verilator.json`.
+checkout of upstream Verilator (`../../verilator/verilator`) pinned in `verilator.json`.
 
 ```
 node bin/build.js                 # all 3 stages
